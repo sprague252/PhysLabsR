@@ -2,6 +2,6 @@
 
 This repository contains Jupyter notebooks that use *R* to do linear regression analysis to use for data analysis for introductory physics labs at ECU.
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sprague252/PhysLabsR/master?urlpath=lab%2Ftree%2FRRegression.ipynb) No account required, but it may take time for the configuration to load and build.
+* Run on Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sprague252/PhysLabsR/master?urlpath=lab%2Ftree%2FRRegression.ipynb) No account required, but it may take time for the configuration to load and build.
 
-Run on [Azure Notebooks](https://notebooks.azure.com/spraguem/projects/physlabsr). Sign in with Microsoft (or ECU) account to run. 
+* Run on Azure: [![Azure Notebooks](https://notebooks.azure.com/launch.png)](https://notebooks.azure.com/import/gh/sprague252/PhysLabsR) Sign in with Microsoft (or ECU) account to run. 
