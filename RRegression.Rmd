@@ -1,0 +1,116 @@
+---
+title: "Linear Regression Analysis in R"
+output:
+  html_document:
+    df_print: paged
+---
+# Linear Regression Analysis in R
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Executing a chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+## Code
+
+The chunk below loads the `ggplot2` library into R. We will need this to make a pretty plot of the result.
+
+```{r}
+library(ggplot2)
+```
+
+The chunk below loads the *x* and *y* points into a dataframe named `mydata`. Replace the numbers in parenthesees with your data points before running it.
+
+```{r}
+xpts <- c(1, 2, 3, 4, 5, 6)
+ypts <- c(1, 4.02, 5.9, 8.11, 10.02, 11.99)
+mydata <- data.frame(xpts, ypts)
+```
+
+Run the chunk below to display the dataframe `mydata` so you can be sure it is correct.
+
+```{r}
+mydata
+```
+
+The chunk below produces a linear regression and displays a summary with the essential information.
+
+```{r}
+linefit <- lm(ypts ~ xpts, data=mydata)
+summary(linefit)
+```
+
+The chunk below gives the fit values for the intercept and slope estimates. These are in the Estimate column in the summary above.
+
+```{r}
+coefficients(linefit)
+```
+
+Since we often express a linear equation in the form $y = Ax + B$, the two cells below store the intercept as `B` and the slope as `A`. The chunks below define them for later.
+
+```{r}
+B <- coefficients(linefit)[[1]]
+A <- coefficients(linefit)[[2]]
+```
+
+We will use the standard error of the fit residuals (residual standard error in the summary above) as our error bars. Run the chunk below to define the varaible `stderror` with this value.
+
+```{r}
+stderror = sigma(linefit)
+stderror
+```
+
+The chunk below gives the T-test confifence intervals of the fit parameters (intercept and slope). These are 95% confidence intervals since there is a 5% total chance that the actual values are outside the intervals.
+
+```{r}
+confint(linefit)
+```
+
+The chunk below produces a basic plot of the data points, error bars, and fit line.
+```{r}
+plt <- ggplot(mydata, aes(x=xpts, y=ypts)) + 
+    geom_point() +
+    geom_errorbar(aes(ymin=ypts-stderror, ymax=ypts+stderror), width=.2,
+                 position=position_dodge(0.05)) +
+    geom_abline(slope=A, intercept=B) 
+print(plt)
+```
+
+The chunk below produces a configurable plot of the data points, error bars, and fit line. Adjust the following parameters to customize the plot.
+
+* Change the values of `xmin`, `xmax`, `ymin`, and `ymax` to adjust the domain and range of the plot.
+* Change the values of `xlabel` and `ylabel` (inside the quotes) to set the axis labels.
+* Change the parameter `ratio.display` to adjust the aspect ratio of the plot. The value 1.618 is a common value used in publications.
+* Change the theme in the second to last line to change the look of the plot. Some themes to try are `theme_gray()`, `theme_bw()`, `theme_linedraw()`, `theme_light()`, `theme_dark()`, `theme_minimal()`, and `theme_classic()`.
+
+```{r}
+xmin <- 0
+xmax <- 7
+ymin <- 0
+ymax <- 15
+
+xlabel <- "x"
+ylabel <- "y"
+
+
+ratio.display <- 1.618
+ratio.values <- (xmax-xmin)/(ymax-ymin)
+plt <- ggplot(mydata, aes(x=xpts, y=ypts)) + 
+    geom_point() +
+    geom_errorbar(aes(ymin=ypts-stderror, ymax=ypts+stderror), width=.2,
+                 position=position_dodge(0.05)) +
+    geom_abline(slope=A, intercept=B) + 
+    coord_fixed(ratio.values / ratio.display) +
+  xlim(xmin, xmax) +
+  ylim(ymin, ymax) +
+  xlab(xlabel) +
+  ylab(ylabel) +
+  theme_bw()
+print(plt)
+```
+
+The chunk below saves the latest `ggplot`. Change the filename to whatever you want. Change the extension to change the file type. Possible file types include "eps", "ps", "tex" (pictex), "pdf", "jpeg", "tiff", "png", "bmp", or "svg".
+
+```{r}
+ggsave("myplot.pdf")
+```
+
